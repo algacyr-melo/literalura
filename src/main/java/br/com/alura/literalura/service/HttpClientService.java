@@ -8,7 +8,7 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.concurrent.CompletableFuture;
 
-public class HttpClientHandler
+public class HttpClientService
 {
     HttpClient client = HttpClient.newHttpClient();
 
@@ -24,6 +24,8 @@ public class HttpClientHandler
         return res;
     }
 
+    // NOTE: Maybe return an Optional<String>
+    // instead of String | null
     public String sendRequest(String url)
     {
         HttpRequest request = HttpRequest.newBuilder()
@@ -37,7 +39,7 @@ public class HttpClientHandler
         }
         catch (IOException | InterruptedException e)
         {
-            e.printStackTrace();
+            System.out.println(e.getCause());
         }
         return null;
     }
