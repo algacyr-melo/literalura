@@ -5,23 +5,17 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.net.http.HttpResponse.BodyHandlers;
-import java.util.concurrent.CompletableFuture;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class HttpClientService
 {
-    HttpClient client = HttpClient.newHttpClient();
+    private final HttpClient httpClient;
 
-    public CompletableFuture<String> sendRequestAsync(String url)
+    public HttpClientService()
     {
-        HttpRequest request = HttpRequest.newBuilder()
-           .uri(URI.create(url))
-           .build();
-
-        CompletableFuture<String> res = client.sendAsync(request, BodyHandlers.ofString())
-            .thenApply(HttpResponse::body);
-
-        return res;
+        this.httpClient = HttpClient.newHttpClient();
     }
 
     // NOTE: Maybe return an Optional<String>
@@ -34,7 +28,7 @@ public class HttpClientService
 
         try
         {
-            HttpResponse<String> res = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> res = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             return res.body();
         }
         catch (IOException | InterruptedException e)
