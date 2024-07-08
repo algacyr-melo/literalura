@@ -5,7 +5,6 @@ import br.com.alura.literalura.dto.BookDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 
@@ -13,13 +12,13 @@ import jakarta.persistence.ManyToMany;
 public class Book
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
     @Column(unique = true)
     private String title;
 
-    @ManyToMany(mappedBy = "books")
+    @ManyToMany
     private List<Author> authors;
 
     private String[] languages;

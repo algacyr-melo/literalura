@@ -14,6 +14,7 @@ import br.com.alura.literalura.dto.BookDto;
 import br.com.alura.literalura.dto.ResponseDto;
 import br.com.alura.literalura.model.Author;
 import br.com.alura.literalura.model.Book;
+import br.com.alura.literalura.service.AuthorService;
 import br.com.alura.literalura.service.BookService;
 import br.com.alura.literalura.service.HttpClientService;
 
@@ -24,6 +25,9 @@ public class MenuDisplay
 
     @Autowired
     private BookService bookService;
+
+    @Autowired
+    private AuthorService authorService;
 
     @Autowired
     private HttpClientService httpClientService;
@@ -44,17 +48,25 @@ public class MenuDisplay
         ObjectMapper mapper = new ObjectMapper();
         try
         {
-            // Deserialize from Json String to an Object
+            // Deserialize from json string to an object
             ResponseDto resDto = mapper.readValue(resJson, ResponseDto.class);
 
-            // Get the first book result
+            // Get the first book result data
             BookDto bookDto = resDto.results().get(0);
 
+            // Get the book's authors
             List<Author> authors = bookDto.authors().stream()
                 .map(authorDto -> new Author(authorDto))
                 .collect(Collectors.toList());
 
+            // Save authors on DB
+            authors.forEach(author -> authorService.saveAuthor(author));
+
+            // Create the book instance with its authors
             Book book = new Book(bookDto, authors);
+
+            // Set the book for each author and save the book on DB
+            authors.forEach(author -> author.getBooks().add(book));
             bookService.saveBook(book);
         }
         catch (JsonProcessingException e)
