@@ -1,11 +1,11 @@
-package br.com.alura.literalura.view;
+package br.com.alura.literalura.controller;
 
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,8 +18,8 @@ import br.com.alura.literalura.service.AuthorService;
 import br.com.alura.literalura.service.BookService;
 import br.com.alura.literalura.service.HttpClientService;
 
-@Service
-public class MenuDisplay
+@Controller
+public class MenuController
 {
     private final Scanner scanner;
 
@@ -32,7 +32,7 @@ public class MenuDisplay
     @Autowired
     private HttpClientService httpClientService;
 
-    public MenuDisplay()
+    public MenuController()
     {
         this.scanner = new Scanner(System.in);
     }
@@ -75,23 +75,32 @@ public class MenuDisplay
         }
     }
 
+    public void listBooks()
+    {
+        List<BookDto> books = bookService.getBooksAll();
+        books.forEach(System.out::println);
+    }
+
     public void start()
     {
         while (true)
         {
             System.out.println("1: Search book by title or author");
+            System.out.println("2: List all books");
             System.out.print("Choose an option or 'exit' to leave> ");
             String option = scanner.nextLine();
             if (option.equals("exit"))
             {
-                break ;
+                break;
             }
             switch (option)
             {
                 case "1":
                     searchBook();
                     break;
-
+                case "2":
+                    listBooks();
+                    break;
                 default:
                     break;
             }

@@ -25,7 +25,6 @@ public class Book
 
     private Long download_count;
 
-    // Constructors
     public Book() {}
 
     public Book(BookDto bookDto, List<Author> authors)
@@ -38,7 +37,33 @@ public class Book
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return this.title + " | " + authors;
+    }
+
+    public Long getId()
+    {
+        return id;
+    }
+
+    public String getTitle()
+    {
+        return title;
+    }
+
+    public List<Author> getAuthors()
+    {
+        return authors;
+    }
+
+    public String[] getLanguages()
+    {
+        return languages;
+    }
+
+    public Long getDownloadCount()
+    {
+        return download_count;
     }
 }

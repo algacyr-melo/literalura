@@ -5,18 +5,17 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import br.com.alura.literalura.repository.BookRepository;
-import br.com.alura.literalura.view.MenuDisplay;
+import br.com.alura.literalura.controller.MenuController;
 
 @SpringBootApplication
 public class LiteraluraApplication implements CommandLineRunner
 {
-    private final MenuDisplay menuDisplay;
+    private final MenuController menuController;
 
     @Autowired
-    public LiteraluraApplication(MenuDisplay menuDisplay)
+    public LiteraluraApplication(MenuController menuController)
     {
-        this.menuDisplay = menuDisplay;
+        this.menuController = menuController;
     }
 
     public static void main(String[] args)
@@ -27,6 +26,6 @@ public class LiteraluraApplication implements CommandLineRunner
     @Override
     public void run(String... args) throws Exception
     {
-        menuDisplay.start();
+        menuController.start();
     }
 }

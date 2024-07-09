@@ -23,8 +23,17 @@ public class Author
     @ManyToMany(mappedBy = "authors")
     private List<Book> books = new ArrayList<>();
 
-    // Constructors
     public Author() {}
+
+    public Long getId()
+    {
+        return id;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
 
     public Author(AuthorDto authorDto)
     {
