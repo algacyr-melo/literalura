@@ -14,24 +14,21 @@ import br.com.alura.literalura.repository.BookRepository;
 import jakarta.transaction.Transactional;
 
 @Service
-public class BookService
-{
+public class BookService {
     @Autowired
     BookRepository bookRepository;
 
-    public void saveBook(Book book)
-    {
-        try
-        {
+    public void save(Book book) {
+        try {
             bookRepository.save(book);
+        } catch (DataIntegrityViolationException e) {
         }
-        catch (DataIntegrityViolationException e) {}
     }
 
     @Transactional
-    public List<BookDto> getBooksAll()
-    {
+    public List<BookDto> getBooksAll() {
         List<Book> books = bookRepository.getBooksAll();
+
         return books.stream()
             .map(book -> new BookDto(
                 book.getTitle(),
@@ -40,6 +37,7 @@ public class BookService
                     .collect(Collectors.toList()),
                 book.getLanguages(),
                 book.getDownloadCount())
-            ).collect(Collectors.toList());
+            )
+            .collect(Collectors.toList());
     }
 }

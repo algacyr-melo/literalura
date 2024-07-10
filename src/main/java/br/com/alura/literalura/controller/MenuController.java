@@ -19,8 +19,7 @@ import br.com.alura.literalura.service.BookService;
 import br.com.alura.literalura.service.HttpClientService;
 
 @Controller
-public class MenuController
-{
+public class MenuController {
     private final Scanner scanner;
 
     @Autowired
@@ -32,69 +31,61 @@ public class MenuController
     @Autowired
     private HttpClientService httpClientService;
 
-    public MenuController()
-    {
+    public MenuController() {
         this.scanner = new Scanner(System.in);
     }
 
-    private void searchBook()
-    {
-        String originUrl = "https://gutendex.com/books/?search=";
+    private void searchBook() {
+        final String ORIGIN_URL = "https://gutendex.com/books/?search=";
+
         System.out.print("Search book by title or author> ");
         String search = scanner.nextLine();
 
-        var resJson = httpClientService.sendRequest(originUrl+search.replace(" ", "%20"));
+        String resolvedUrl = ORIGIN_URL + search.replace(" ", "%20");
+        String resJson = httpClientService.sendRequest(resolvedUrl);
 
         ObjectMapper mapper = new ObjectMapper();
-        try
-        {
-            // Deserialize from json string to an object
+        try {
+            // TODO: Did we get any books on response?
             ResponseDto resDto = mapper.readValue(resJson, ResponseDto.class);
-
-            // Get the first book result data
             BookDto bookDto = resDto.results().get(0);
 
-            // Get the book's authors
+            // Save Book and Authors entities
+            Book book = new Book(bookDto);
+            bookService.save(book);
+
             List<Author> authors = bookDto.authors().stream()
-                .map(authorDto -> new Author(authorDto))
-                .collect(Collectors.toList());
+                    .map(authorDto -> new Author(authorDto))
+                    .collect(Collectors.toList());
+            authorService.saveAll(authors);
 
-            // Save authors on DB
-            authors.forEach(author -> authorService.saveAuthor(author));
-
-            // Create the book instance with its authors
-            Book book = new Book(bookDto, authors);
-
-            // Set the book for each author and save the book on DB
+            // Establish the relationship between Book and its Authors
+            book.setAuthors(authors);
             authors.forEach(author -> author.getBooks().add(book));
-            bookService.saveBook(book);
-        }
-        catch (JsonProcessingException e)
-        {
+
+            // Save the Book so it reflects on Authors
+            bookService.save(book);
+
+        } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
     }
 
-    public void listBooks()
-    {
+    private void listBooks() {
         List<BookDto> books = bookService.getBooksAll();
         books.forEach(System.out::println);
     }
 
-    public void start()
-    {
-        while (true)
-        {
+    public void start() {
+        while (true) {
             System.out.println("1: Search book by title or author");
             System.out.println("2: List all books");
             System.out.print("Choose an option or 'exit' to leave> ");
             String option = scanner.nextLine();
-            if (option.equals("exit"))
-            {
+            if (option.equals("exit")) {
                 break;
             }
-            switch (option)
-            {
+            switch (option) {
                 case "1":
                     searchBook();
                     break;

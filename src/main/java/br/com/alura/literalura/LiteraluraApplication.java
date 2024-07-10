@@ -8,24 +8,20 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import br.com.alura.literalura.controller.MenuController;
 
 @SpringBootApplication
-public class LiteraluraApplication implements CommandLineRunner
-{
+public class LiteraluraApplication implements CommandLineRunner {
     private final MenuController menuController;
 
     @Autowired
-    public LiteraluraApplication(MenuController menuController)
-    {
+    public LiteraluraApplication(MenuController menuController) {
         this.menuController = menuController;
     }
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         SpringApplication.run(LiteraluraApplication.class, args);
     }
 
     @Override
-    public void run(String... args) throws Exception
-    {
+    public void run(String... args) throws Exception {
         menuController.start();
     }
 }

@@ -9,30 +9,24 @@ import java.net.http.HttpResponse;
 import org.springframework.stereotype.Service;
 
 @Service
-public class HttpClientService
-{
+public class HttpClientService {
     private final HttpClient httpClient;
 
-    public HttpClientService()
-    {
+    public HttpClientService() {
         this.httpClient = HttpClient.newHttpClient();
     }
 
     // NOTE: Maybe return an Optional<String>
     // instead of String | null
-    public String sendRequest(String url)
-    {
+    public String sendRequest(String url) {
         HttpRequest request = HttpRequest.newBuilder()
-           .uri(URI.create(url))
-           .build();
+                .uri(URI.create(url))
+                .build();
 
-        try
-        {
+        try {
             HttpResponse<String> res = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             return res.body();
-        }
-        catch (IOException | InterruptedException e)
-        {
+        } catch (IOException | InterruptedException e) {
             System.out.println(e.getCause());
         }
         return null;

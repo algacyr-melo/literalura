@@ -7,14 +7,14 @@ import br.com.alura.literalura.dto.AuthorDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 
 @Entity
-public class Author
-{
+public class Author {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true)
@@ -25,29 +25,24 @@ public class Author
 
     public Author() {}
 
-    public Long getId()
-    {
-        return id;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public Author(AuthorDto authorDto)
-    {
+    public Author(AuthorDto authorDto) {
         this.name = authorDto.name();
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     @Override
-    public String toString()
-    {
+    public String toString() {
         return this.name;
     }
 
-    public List<Book> getBooks()
-    {
+    public List<Book> getBooks() {
         return books;
     }
 }
