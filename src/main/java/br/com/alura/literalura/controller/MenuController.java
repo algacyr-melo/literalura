@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.alura.literalura.dto.AuthorDto;
 import br.com.alura.literalura.dto.BookDto;
 import br.com.alura.literalura.dto.ResponseDto;
 import br.com.alura.literalura.model.Author;
@@ -76,10 +77,16 @@ public class MenuController {
         books.forEach(System.out::println);
     }
 
+    private void listAuthors() {
+        List<AuthorDto> authorsDto = authorService.getAll();
+        authorsDto.forEach(System.out::println);
+    }
+
     public void start() {
         while (true) {
             System.out.println("1: Search book by title or author");
-            System.out.println("2: List all books");
+            System.out.println("2: List books");
+            System.out.println("3: List authors");
             System.out.print("Choose an option or 'exit' to leave> ");
             String option = scanner.nextLine();
             if (option.equals("exit")) {
@@ -91,6 +98,9 @@ public class MenuController {
                     break;
                 case "2":
                     listBooks();
+                    break;
+                case "3":
+                    listAuthors();
                     break;
                 default:
                     break;

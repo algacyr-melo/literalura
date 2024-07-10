@@ -14,9 +14,9 @@ public record BookDto(
 ) {
     @Override
     public final String toString() {
-        return "title: " + title +
-                ", authors: " + authors() +
-                ", languages: " + Arrays.toString(languages()) +
-                ", download_count: " + download_count();
+        return "Title: " + title +
+                ", Authors: " + authors() +
+                ", Languages: " + Arrays.toString(languages()) +
+                ", Download Count: " + download_count();
     }
 }

@@ -20,6 +20,10 @@ public class Author {
     @Column(unique = true)
     private String name;
 
+    private Integer birthYear;
+
+    private Integer deathYear;
+
     @ManyToMany(mappedBy = "authors")
     private List<Book> books = new ArrayList<>();
 
@@ -27,6 +31,13 @@ public class Author {
 
     public Author(AuthorDto authorDto) {
         this.name = authorDto.name();
+        this.birthYear = authorDto.birthYear();
+        this.deathYear = authorDto.deathYear();
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 
     public Long getId() {
@@ -37,12 +48,15 @@ public class Author {
         return name;
     }
 
-    @Override
-    public String toString() {
-        return this.name;
-    }
-
     public List<Book> getBooks() {
         return books;
+    }
+
+    public Integer getBirthYear() {
+        return birthYear;
+    }
+
+    public Integer getDeathYear() {
+        return deathYear;
     }
 }

@@ -33,11 +33,13 @@ public class BookService {
             .map(book -> new BookDto(
                 book.getTitle(),
                 book.getAuthors().stream()
-                    .map(author -> new AuthorDto(author.getName()))
-                    .collect(Collectors.toList()),
+                    .map(author -> new AuthorDto(
+                        author.getName(),
+                        author.getBirthYear(),
+                        author.getDeathYear())
+                    ).collect(Collectors.toList()),
                 book.getLanguages(),
                 book.getDownloadCount())
-            )
-            .collect(Collectors.toList());
+            ).collect(Collectors.toList());
     }
 }
