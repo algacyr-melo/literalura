@@ -1,7 +1,13 @@
 package br.com.alura.literalura.controller;
 
+import java.lang.Float;
+
+import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +53,10 @@ public class MenuController {
 
         ObjectMapper mapper = new ObjectMapper();
         try {
-            // TODO: Did we get any books on response?
             ResponseDto resDto = mapper.readValue(resJson, ResponseDto.class);
+            if (resDto.count() == 0) {
+                return;
+            }
             BookDto bookDto = resDto.results().get(0);
 
             // Save Book and Authors entities
@@ -73,25 +81,50 @@ public class MenuController {
     }
 
     private void listBooks() {
-        List<BookDto> books = bookService.getBooksAll();
+        List<BookDto> books = bookService.findAll();
         books.forEach(System.out::println);
     }
 
     private void listAuthors() {
-        List<AuthorDto> authorsDto = authorService.getAll();
+        List<AuthorDto> authorsDto = authorService.findAll();
         authorsDto.forEach(System.out::println);
+    }
+
+    private void listAuthorsAliveAtYear() {
+        System.out.print("List authors alive at the year> ");
+        Integer year = scanner.nextInt();
+        scanner.nextLine();
+
+        List<AuthorDto> authorsDto = authorService.findAuthorsAliveAt(year);
+        authorsDto.forEach(System.out::println);
+    }
+
+    private void showBooksCountByLanguage() {
+        List<BookDto> books = bookService.findAll();
+
+        Map<String, Long> bookLanguageCounts = books.stream()
+            .flatMap(book -> Arrays.stream(book.languages()))
+            .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        bookLanguageCounts.forEach((language, count) ->
+            System.out.println(language + " -> " + count)
+        );
     }
 
     public void start() {
         while (true) {
+            System.out.println();
             System.out.println("1: Search book by title or author");
             System.out.println("2: List books");
             System.out.println("3: List authors");
+            System.out.println("4: List authors alive at year");
+            System.out.println("5: Show books count by language");
             System.out.print("Choose an option or 'exit' to leave> ");
             String option = scanner.nextLine();
             if (option.equals("exit")) {
                 break;
             }
+            System.out.println();
             switch (option) {
                 case "1":
                     searchBook();
@@ -102,9 +135,18 @@ public class MenuController {
                 case "3":
                     listAuthors();
                     break;
+                case "4":
+                    listAuthorsAliveAtYear();
+                    break;
+                case "5":
+                    showBooksCountByLanguage();
+                    break;
                 default:
                     break;
             }
+            System.out.println();
+            System.out.print("Press any key to go back to menu...");
+            scanner.nextLine();
         }
     }
 }

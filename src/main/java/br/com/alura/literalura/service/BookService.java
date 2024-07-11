@@ -26,8 +26,8 @@ public class BookService {
     }
 
     @Transactional
-    public List<BookDto> getBooksAll() {
-        List<Book> books = bookRepository.getBooksAll();
+    public List<BookDto> findAll() {
+        List<Book> books = bookRepository.findAll();
 
         return books.stream()
             .map(book -> new BookDto(

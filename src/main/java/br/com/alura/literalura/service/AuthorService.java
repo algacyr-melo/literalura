@@ -25,8 +25,21 @@ public class AuthorService {
     }
 
     @Transactional
-    public List<AuthorDto> getAll() {
-        List<Author> authors = authorRepository.getAll();
+    public List<AuthorDto> findAll() {
+        List<Author> authors = authorRepository.findAll();
+
+        return authors.stream()
+            .map(author -> new AuthorDto(
+                author.getName(),
+                author.getBirthYear(),
+                author.getDeathYear())
+            ).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<AuthorDto> findAuthorsAliveAt(Integer year) {
+        List<Author> authors = authorRepository
+            .findByBirthYearLessThanEqualAndDeathYearGreaterThanEqual(year, year);
 
         return authors.stream()
             .map(author -> new AuthorDto(
